@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessible E-commerce</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+</head>
+<body>
+    <!-- Categories Start -->
+    <section id="Categories-tab">
+        <div class="container-fluid pt-5">
+            <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Categories</span></h2>
+            <div class="row px-xl-5 pb-3">
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    <a class="text-decoration-none" href="">
+                        <div class="cat-item d-flex align-items-center mb-4" data-name="Electronics" data-description="This category includes gadgets like phones, laptops, and tablets.">
+                            <div class="overflow-hidden" style="width: 100px; height: 100px;">
+                                <img class="img-fluid" src="img/cat-1.jpg" alt="">
+                            </div>
+                            <div class="flex-fill pl-3">
+                                <h6>Electronics</h6>
+                                <small class="text-body">100 Products</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    <a class="text-decoration-none" href="">
+                        <div class="cat-item d-flex align-items-center mb-4" data-name="Fashion" data-description="This category includes clothing, accessories, and footwear.">
+                            <div class="overflow-hidden" style="width: 100px; height: 100px;">
+                                <img class="img-fluid" src="img/cat-2.jpg" alt="">
+                            </div>
+                            <div class="flex-fill pl-3">
+                                <h6>Fashion</h6>
+                                <small class="text-body">100 Products</small>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <!-- Add more categories as needed -->
+            </div>
+        </div>
+    </section>
+    <!-- Categories End -->
+
+    <!-- Products Start -->
+    <div id="products"><div class="product" data-name="Laptop" data-description="Description of Laptop A. It has an Intel i5 processor, 8GB RAM, and a 256GB SSD.">
+        <div>
+            <h3>Laptop</h3>
+            <p>Short description of Laptop </p>
+        </div>
+        <div class="product" data-name="Laptop" data-description="Description of Laptop B. It features an Intel i7 processor, 16GB RAM, and a 512GB SSD.">
+            <h3>Laptop</h3>
+            <p>Short description of Laptop </p>
+        </div>
+        <!-- Add more products as needed -->
+    </div>
+    <!-- Products End -->
+
+    <script>
+        const products = document.querySelectorAll('.product');
+        const categories = document.querySelectorAll('.cat-item');
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        }
+
+        if (annyang) {
+            const commands = {
+                'tell me the products': () => {
+                    let productNames = '';
+                    products.forEach((product, index) => {
+                        productNames += `Product ${index + 1}: ${product.dataset.name}. `;
+                    });
+                    speak(productNames);
+                    setTimeout(() => {
+                        speak('Would you like to know more about a specific product?');
+                    }, 5000); // Adjust timing as needed
+                },
+                'tell me more about *productName': (productName) => {
+                    let found = false;
+                    products.forEach((product) => {
+                        if (productName.toLowerCase().includes(product.dataset.name.toLowerCase())) {
+                            speak(product.dataset.description);
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        speak('Sorry, I could not find that product. Please try again.');
+                    }
+                },
+                'tell me the categories': () => {
+                    let categoryNames = '';
+                    categories.forEach((category, index) => {
+                        categoryNames += `Category ${index + 1}: ${category.dataset.name}. `;
+                    });
+                    speak(categoryNames);
+                    setTimeout(() => {
+                        speak('Would you like to know more about a specific category?');
+                    }, 5000); // Adjust timing as needed
+                },
+                'about category *categoryName': (categoryName) => {
+                    let found = false;
+                    categories.forEach((category) => {
+                        if (categoryName.toLowerCase().includes(category.dataset.name.toLowerCase())) {
+                            speak(category.dataset.description);
+                            found = true;
+                        }
+                    });
+                    if (!found) {
+                        speak('Sorry, I could not find that category. Please try again.');
+                    }
+                },
+                'go to categories': () => { 
+                    speak("Navigating to Categories"); 
+                    window.location.href = '#Categories-tab';    
+                },
+                'take me to categories': () => { 
+                    speak("Navigating to Categories"); 
+                    window.location.href = '#Categories-tab';    
+                },
+                'navigate to categories': () => { 
+                    speak("Navigating to Categories"); 
+                    window.location.href = '#Categories-tab';    
+                },
+                'show categories': () => { 
+                    speak("Navigating to Categories"); 
+                    window.location.href = '#Categories-tab';    
+                },
+                
+            };
+
+            annyang.addCommands(commands);
+            annyang.start();
+        }
+
+        window.onload = () => {
+            speak('Welcome to the accessible e-commerce site. You can ask me to tell you the products or categories.');
+        };
+    </script>
+</body>
+</html>

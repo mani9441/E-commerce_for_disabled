@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microphone Access</title>
+</head>
+<body>
+    <h1>Microphone Access Example</h1>
+    <button id="startButton">Start Microphone</button>
+    <p id="status"></p>
+
+    <script>
+        document.getElementById('startButton').addEventListener('click', function() {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function(stream) {
+                    document.getElementById('status').textContent = "Microphone access granted.";
+                    // Use the stream for audio processing here
+                })
+                .catch(function(err) {
+                    document.getElementById('status').textContent = "Microphone access denied: " + err.message;
+                });
+        });
+    </script>
+</body>
+</html>
